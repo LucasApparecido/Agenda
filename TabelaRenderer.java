@@ -12,13 +12,13 @@ public class TabelaRenderer extends DefaultTableCellRenderer {
                 coluna);
 
         if (linha % 2 == 0) {
-            componente.setBackground(Color.WHITE);
+            componente.setBackground(Color.WHITE); // Define o fundo como branco para linhas pares
         } else {
-            componente.setBackground(Color.LIGHT_GRAY);
+            componente.setBackground(Color.LIGHT_GRAY); // Define o fundo como cinza claro para linhas ímpares
         }
 
         if (estaSelecionado) {
-            componente.setBackground(new Color(0, 255, 255));
+            componente.setBackground(new Color(0, 255, 255)); // Define o fundo como ciano se a célula estiver selecionada
         }
 
         return componente;

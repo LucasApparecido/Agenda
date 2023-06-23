@@ -1,11 +1,9 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class Agenda {
@@ -263,20 +261,6 @@ class TelaAgenda extends JFrame {
         JPCentral.add("Center", JPTabelaContatos);
 
         getContentPane().add("Center", JPCentral);
-
-        JTTabelaContatos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                int linha = JTTabelaContatos.rowAtPoint(evt.getPoint());
-                if (JPJanelaFlutuante == null) {
-                    JPJanelaFlutuante = new JFrame(); // Cria uma nova instância de JFrame
-                }
-                if (!JPJanelaFlutuante.isVisible()) {
-                    JanelaFlutuante(linha);
-                } else {
-                    exibirContatoNaJanelaFlutuante(linha);
-                }
-            }
-        });
     }
 
     private void armazenarDados() {
@@ -297,12 +281,34 @@ class TelaAgenda extends JFrame {
         arquivoDados.armazenar(dados);
     }
 
-    private void preencherTabelaContatos() {
+    public void preencherTabelaContatos() {
         while (dadosIterator.hasNext()) {
             PessoaAgenda pessoa = (PessoaAgenda) dadosIterator.next();
             String[] dados = { pessoa.getCodigo(), pessoa.getNome(), pessoa.getTelefone(),
                     pessoa.getEndereco(), pessoa.getAnotacoes() };
             DTModeloTabelaContatos.addRow(dados);
+        }
+    }
+
+    private void realizarConsulta(String pesquisa) {
+        // Limpar a tabela atual
+        DTModeloTabelaContatos.setRowCount(0);
+
+        while (dadosIterator.hasNext()) {
+            PessoaAgenda pessoa = (PessoaAgenda) dadosIterator.next();
+
+            // Verificar se o nome ou o código da pessoa corresponde à pesquisa
+            if (pessoa.getNome().toLowerCase().contains(pesquisa.toLowerCase())
+                    || pessoa.getCodigo().equalsIgnoreCase(pesquisa)) {
+                // Adicionar a pessoa à tabela
+                String[] dados = { pessoa.getCodigo(), pessoa.getNome(), pessoa.getTelefone(),
+                        pessoa.getEndereco(), pessoa.getAnotacoes() };
+                DTModeloTabelaContatos.addRow(dados);
+            }
+        }
+        if (DTModeloTabelaContatos.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(null, "Nenhum contato encontrado");
+            preencherTabelaContatos();
         }
     }
 }
