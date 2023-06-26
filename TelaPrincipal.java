@@ -114,6 +114,8 @@ public class TelaPrincipal extends JFrame {
 	// Variavel para coletar a linha selecionada
 	private int linhaSelecionada = -1;
 
+	private boolean consultaFeita = false;
+
 	// Construtor da tela principal
 	public TelaPrincipal() {
 
@@ -346,26 +348,6 @@ public class TelaPrincipal extends JFrame {
 	}
 
 	/*
-	 * Função para preencher a tabela
-	 * Ela limpa a tabela com o comando .setRowCount
-	 * Recebe todos os usuarios da tabela
-	 * Enquanto tiver usuarios no arquivo ela:
-	 * Obtem o proximo usuario
-	 * Adiciona o usuario a tabela
-	 */
-	private void inicializarTabela() {
-		dtmModeloTabelaContatos.setRowCount(0);
-
-		dadosIterator = arquivoDados.obterTodos();
-		while (dadosIterator.hasNext()) {
-			pessoa = (PessoaAgenda) dadosIterator.next();
-			Object[] dados = { pessoa.getCodigo(), pessoa.getNome(), pessoa.getEndereco(), pessoa.getTelefone(),
-					pessoa.getAnotacoes() };
-			dtmModeloTabelaContatos.addRow(dados);
-		}
-	}
-
-	/*
 	 * Função para armazenar os dados
 	 * Ela recebe quantas linhas a tabela tem
 	 * Verifica antes de criar a variavel se a tabela possui linhas
@@ -394,6 +376,26 @@ public class TelaPrincipal extends JFrame {
 			}
 
 			arquivoDados.armazenar(dados);
+		}
+	}
+
+	/*
+	 * Função para preencher a tabela
+	 * Ela limpa a tabela com o comando .setRowCount
+	 * Recebe todos os usuarios da tabela
+	 * Enquanto tiver usuarios no arquivo ela:
+	 * Obtem o proximo usuario
+	 * Adiciona o usuario a tabela
+	 */
+	private void inicializarTabela() {
+		dtmModeloTabelaContatos.setRowCount(0);
+
+		dadosIterator = arquivoDados.obterTodos();
+		while (dadosIterator.hasNext()) {
+			pessoa = (PessoaAgenda) dadosIterator.next();
+			Object[] dados = { pessoa.getCodigo(), pessoa.getNome(), pessoa.getEndereco(), pessoa.getTelefone(),
+					pessoa.getAnotacoes() };
+			dtmModeloTabelaContatos.addRow(dados);
 		}
 	}
 
@@ -435,6 +437,7 @@ public class TelaPrincipal extends JFrame {
 		} else {
 			jpNavegadores.setVisible(true);
 			jtTabelaContatos.setRowSelectionInterval(0, 0);
+			consultaFeita = true;
 		}
 	}
 
@@ -544,7 +547,10 @@ public class TelaPrincipal extends JFrame {
 
 					String[] dados = { codigo, nome, telefone, endereco, anotacoes };
 					dtmModeloTabelaContatos.addRow(dados);
-					armazenarDados();
+
+					pessoa = new PessoaAgenda(codigo, nome, endereco, telefone, anotacoes);
+					arquivoDados.inserir(pessoa);
+
 				}
 			} else {
 				JOptionPane.showMessageDialog(null, "Termine a navegação para inserir um novo contato");
@@ -663,6 +669,10 @@ public class TelaPrincipal extends JFrame {
 					JOptionPane.showMessageDialog(null, "Contato excluído com sucesso.");
 					jpNavegadores.setVisible(false);
 					jtTabelaContatos.clearSelection();
+					if(consultaFeita) {
+						inicializarTabela();
+						consultaFeita = false;
+					}
 				}
 			} else {
 				JOptionPane.showMessageDialog(null, "Nenhum contato selecionado.");
@@ -711,7 +721,12 @@ public class TelaPrincipal extends JFrame {
 		 */
 		public void fimNavegacao() {
 			jpNavegadores.setVisible(false);
-			inicializarTabela();
+			limpar();
+			jtTabelaContatos.clearSelection();
+			if (consultaFeita) {
+				inicializarTabela();
+				consultaFeita = false;
+			} 
 		}
 
 	}
