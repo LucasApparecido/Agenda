@@ -1,14 +1,14 @@
 class PessoaAgenda extends ItemParaArmazenar{
     protected String codigo,
                         nome,
-                        endereco,
+                        endereco, 
                         telefone,
                         anotacoes;
 
     public boolean igual(ItemParaArmazenar pa){
         if (codigo.equals(((PessoaAgenda) pa).getCodigo())) {
-                   return true;
-               }
+            return true;
+        }
         return false;
     }
 
