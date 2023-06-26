@@ -426,8 +426,8 @@ public class TelaPrincipal extends JFrame {
 			codigo = pessoa.getCodigo();
 
 			if (nome.equalsIgnoreCase(termoConsulta) || codigo.equalsIgnoreCase(termoConsulta)) {
-				String[] dados = { pessoa.getCodigo(), pessoa.getNome(), pessoa.getTelefone(),
-						pessoa.getEndereco(), pessoa.getAnotacoes() };
+				String[] dados = { pessoa.getCodigo(), pessoa.getNome(), pessoa.getEndereco(),
+						pessoa.getTelefone(), pessoa.getAnotacoes() };
 				dtmModeloTabelaContatos.addRow(dados);
 			}
 		}
