@@ -2,7 +2,7 @@ import java.util.*;
 import java.io.*;
 
 class Armazenamento {
-	String arquivo; 
+	String arquivo;
 	ArrayList<ItemParaArmazenar> arl;
 	
 	public Armazenamento (String arq){
