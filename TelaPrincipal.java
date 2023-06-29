@@ -304,19 +304,8 @@ public class TelaPrincipal extends JFrame {
 		// adiciona o formulario a oeste no painel principal
 		jpCentral.add(jpDados, "West");
 
-		// inicia o modelo da tabela como padrão e barra a edição das linhas da mesma
-		dtmModeloTabelaContatos = new DefaultTableModel() {
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				return false;
-			}
-		};
-
-		// configura as colunas
-		dtmModeloTabelaContatos.addColumn("Código");
-		dtmModeloTabelaContatos.addColumn("Nome");
-		dtmModeloTabelaContatos.addColumn("Endereco");
-		dtmModeloTabelaContatos.addColumn("Telefone");
-		dtmModeloTabelaContatos.addColumn("Anotações");
+		// inicia o modelo da tabela 
+		criaTabela();
 
 		// cria o painel da tabela
 		jpTabelaContatos = new JPanel();
@@ -345,6 +334,24 @@ public class TelaPrincipal extends JFrame {
 
 		// adiciona o painel principal a tela
 		getContentPane().add("Center", jpCentral);
+	}
+
+	// inicia o modelo da tabela como padrão e barra a edição das linhas da mesma
+	private DefaultTableModel criaTabela() {
+		dtmModeloTabelaContatos = new DefaultTableModel() {
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				return false;
+			}
+		};
+
+		// configura as colunas
+		dtmModeloTabelaContatos.addColumn("Código");
+		dtmModeloTabelaContatos.addColumn("Nome");
+		dtmModeloTabelaContatos.addColumn("Endereco");
+		dtmModeloTabelaContatos.addColumn("Telefone");
+		dtmModeloTabelaContatos.addColumn("Anotações");
+
+		return dtmModeloTabelaContatos;
 	}
 
 	/*
@@ -388,7 +395,8 @@ public class TelaPrincipal extends JFrame {
 	 * Adiciona o usuario a tabela
 	 */
 	private void inicializarTabela() {
-		dtmModeloTabelaContatos.setRowCount(0);
+		dtmModeloTabelaContatos = criaTabela();
+		jtTabelaContatos.setModel(dtmModeloTabelaContatos);
 
 		dadosIterator = arquivoDados.obterTodos();
 		while (dadosIterator.hasNext()) {
@@ -652,7 +660,6 @@ public class TelaPrincipal extends JFrame {
 		 * avisa que foi excluido com sucesso
 		 * desativa o painel de navegação
 		 * desceleciona a linha
-		 * 
 		 * se não tiver linha selecionada ele da uma mensagem de erro
 		 */
 		public void excluir() {

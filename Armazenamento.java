@@ -23,6 +23,7 @@ class Armazenamento {
 			}
 			
 			out.close();
+			this.arl = arl;
 		}
 		catch (FileNotFoundException e) {}
 		catch (IOException e) {}
